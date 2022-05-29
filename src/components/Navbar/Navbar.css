@@ -1,0 +1,10 @@
+.brand-img {
+  overflow: hidden;
+}
+
+.brand-img img {
+  height: 50px;
+  width: 120px;
+  object-fit: cover;
+  object-position: 100% 70%;
+}

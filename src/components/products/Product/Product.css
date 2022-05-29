@@ -1,0 +1,13 @@
+.product-img-bucket {
+  height: 10rem;
+  width: 10rem;
+}
+
+.card-bucket-1 {
+  width: 25rem;
+}
+
+.card-img {
+  height: 200px;
+  object-fit: contain;
+}
