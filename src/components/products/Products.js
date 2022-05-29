@@ -20,7 +20,7 @@ let products1 = [
   },
 ];
 
-const Products = ({ products }) => {
+const Products = ({ products, handleAddToCart }) => {
   return (
     <main>
       <div className="container products-bucket-1">
@@ -34,6 +34,7 @@ const Products = ({ products }) => {
                 name={val.name}
                 description={val.description}
                 price={val.price}
+                handleAddToCart={handleAddToCart}
               />
             );
           })}

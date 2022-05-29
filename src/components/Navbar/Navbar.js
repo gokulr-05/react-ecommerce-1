@@ -2,7 +2,8 @@ import React from "react";
 import ecom from "../../assets/freedom.jpg";
 import "./Navbar.css";
 
-const Navbar = () => {
+const Navbar = ({ totalCartItems }) => {
+  //   console.log("totalCartItems=", totalCartItems);
   return (
     <div>
       <nav className="navbar fixed-top bg-light pt-3 ">
@@ -13,9 +14,10 @@ const Navbar = () => {
           <div>
             <button type="button" className="btn btn-dark position-relative">
               <i className="fs-3 fa-solid fa-cart-shopping"></i>
-              {/* Inbox */}
+
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                1<span className="visually-hidden">unread messages</span>
+                {totalCartItems}
+                <span className="visually-hidden">unread messages</span>
               </span>
             </button>
           </div>

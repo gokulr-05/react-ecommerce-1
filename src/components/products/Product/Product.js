@@ -1,6 +1,6 @@
 import React from "react";
 import "./Product.css";
-const Product = ({ id, image, name, description, price }) => {
+const Product = ({ id, image, name, description, price, handleAddToCart }) => {
   let image1 = image.url;
   let price1 = price.formatted_with_symbol;
 
@@ -15,7 +15,7 @@ const Product = ({ id, image, name, description, price }) => {
 
         <div className="card-body">
           <div className="d-flex align-items-center justify-content-between">
-            <h5 className="card-title  text-capitalize m-0 p-0">{name}</h5>
+            <h5 className="card-title  text-uppercase m-0 p-0">{name}</h5>
             <h5 className="m-0 p-0">{price1}</h5>
           </div>
           <div className="text-center my-3">
@@ -25,7 +25,13 @@ const Product = ({ id, image, name, description, price }) => {
             ></p>
           </div>
           <div className="text-center">
-            <a href="#1" className="btn btn-primary text-capitalize">
+            <a
+              onClick={() => {
+                handleAddToCart(id, 1);
+              }}
+              href="#1"
+              className="btn btn-primary text-capitalize"
+            >
               add to cart
             </a>
           </div>
