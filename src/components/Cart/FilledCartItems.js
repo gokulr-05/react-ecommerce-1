@@ -1,7 +1,18 @@
 import React from "react";
 import "./FilterCartItems.css";
+import { useState, useEffect } from "react";
 
-const FilledCartItems = ({ name, price, image, quantity }) => {
+const FilledCartItems = ({
+  id,
+  name,
+  price,
+  image,
+  quantity,
+  updateCartQuantity,
+  removeItemFromCart,
+}) => {
+  if (name === "OPPO MOBILE") console.log("oppo mobile quantity=", quantity);
+
   return (
     <div className="container filtercartitem-bucket-1">
       <div className="row row-bucket-1">
@@ -20,11 +31,25 @@ const FilledCartItems = ({ name, price, image, quantity }) => {
           </div>
           <div className="d-flex gap-3 align-items-center justify-content-center">
             <div>
-              <button className="plus-btn bg-primary text-white">+</button>
+              <button
+                onClick={() => {
+                  updateCartQuantity(id, quantity + 1);
+                }}
+                className="plus-btn bg-primary text-white"
+              >
+                +
+              </button>
             </div>
             <div>{quantity}</div>
             <div>
-              <button className="minus-btn bg-primary text-white">-</button>
+              <button
+                onClick={() => {
+                  updateCartQuantity(id, quantity - 1);
+                }}
+                className="minus-btn bg-primary text-white"
+              >
+                -
+              </button>
             </div>
           </div>
         </div>
@@ -33,7 +58,14 @@ const FilledCartItems = ({ name, price, image, quantity }) => {
             <p>{price}</p>
           </div>
           <div className=" d-flex align-items-center justify-content-center">
-            <button className="btn btn-primary text-capitalize">remove</button>
+            <button
+              onClick={() => {
+                removeItemFromCart();
+              }}
+              className="btn btn-primary text-capitalize"
+            >
+              remove
+            </button>
           </div>
         </div>
       </div>

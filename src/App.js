@@ -5,12 +5,20 @@ import Navbar from "./components/Navbar/Navbar";
 import commerce from "./lib/Commerce";
 import LoadingSpinner from "../src/LoadingSpinner";
 import Cart from "./components/Cart/Cart";
+import {
+  Route,
+  Routes,
+  Outlet,
+  Link,
+  NavLink,
+  Navigate,
+} from "react-router-dom";
 
 let App = () => {
   let [isLoading, setIsLoading] = useState(true);
   let [products, setProducts] = useState([]);
   let [cart, setCart] = useState({ cart: { total_items: 0 } });
-  console.log("cart=", cart);
+  console.log("cart in App.js=", cart);
 
   let fetchProducts = async () => {
     setIsLoading(true);
@@ -29,11 +37,35 @@ let App = () => {
     setIsLoading(false);
   };
 
+  let updateCartQuantity = async (productId, quantity) => {
+    // console.log(
+    //   "updateCartQuantity: productId:",
+    //   productId,
+    //   "lineItem quantity=",
+    //   quantity
+    // );
+    let response = await commerce.cart.update(productId, { quantity });
+
+    // console.log("updateCartQuantity: response=", response);
+
+    setCart(response.cart);
+  };
+
+  let removeItemFromCart = async (productId) => {
+    let response = await commerce.cart.remove(productId);
+    setCart(response.cart);
+  };
+
+  let emptyCart = async () => {
+    let response = await commerce.cart.empty();
+    setCart(response.cart);
+  };
+
   let handleAddToCart = async (productId, productQuantity) => {
-    console.log("handle add to cart:");
+    // console.log("handle add to cart:");
 
     let cart = await commerce.cart.add(productId, productQuantity);
-    console.log("cart after added items=", cart);
+    // console.log("cart after added items=", cart);
     setCart(cart.cart);
   };
 
@@ -49,8 +81,27 @@ let App = () => {
   return (
     <div>
       <Navbar totalCartItems={cart.total_items} />
-      {/* <Products handleAddToCart={handleAddToCart} products={products} /> */}
-      <Cart cart={cart} />
+
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />}></Route>
+        <Route
+          path="/home"
+          element={
+            <Products handleAddToCart={handleAddToCart} products={products} />
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <Cart
+              updateCartQuantity={updateCartQuantity}
+              removeItemFromCart={removeItemFromCart}
+              emptyCart={emptyCart}
+              cart={cart}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 };
