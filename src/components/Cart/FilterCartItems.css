@@ -1,0 +1,31 @@
+.filtercartitem-bucket-1 {
+  margin: 25px auto;
+}
+
+.filtercartitem-img-bucket-1 {
+  width: 50%;
+  height: auto;
+}
+
+.filled-cart-items-name-bucket {
+  margin-top: 20%;
+}
+
+.filled-cart-items-name-bucket p {
+  font-size: 22px;
+}
+
+.filled-cart-items-price-bucket {
+  margin-top: 20%;
+}
+.filled-cart-items-price-bucket p {
+  font-size: 22px;
+}
+
+.plus-btn,
+.minus-btn {
+  border-radius: 50%;
+  /* background-color: black;
+  color: white; */
+  /* border-color: transparent; */
+}
