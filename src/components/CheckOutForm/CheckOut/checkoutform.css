@@ -1,0 +1,11 @@
+.checkout {
+  margin-top: 100px;
+}
+
+.num {
+  border: 2px solid black;
+  padding: 2px 4px;
+  margin-right: 5px;
+  border-radius: 50%;
+  /* color: white; */
+}

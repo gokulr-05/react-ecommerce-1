@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./Cart.css";
 import EmptyCart from "./EmptyCart";
 import FilledCart from "./FilledCart";
+import { Link } from "react-router-dom";
 
 let Cart = ({ cart, updateCartQuantity, removeItemFromCart, emptyCart }) => {
   console.log("cart in cart.js=", cart);
@@ -49,9 +50,15 @@ let Cart = ({ cart, updateCartQuantity, removeItemFromCart, emptyCart }) => {
               >
                 empty cart
               </button>
-              <button className="btn btn-primary text-capitalize">
+              {/* <button className="btn btn-primary text-capitalize">
                 check out
-              </button>
+              </button> */}
+              <Link
+                className="btn btn-primary text-capitalize"
+                to="/checkout/shippingaddress"
+              >
+                Checkout
+              </Link>
             </div>
           </div>
         </div>

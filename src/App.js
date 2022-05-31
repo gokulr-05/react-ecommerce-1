@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
+
 import Products from "./components/products/Products";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import commerce from "./lib/Commerce";
 import LoadingSpinner from "../src/LoadingSpinner";
 import Cart from "./components/Cart/Cart";
+import AddressForm from "./components/CheckOutForm/CheckOut/AddressForm";
+import PaymentForm from "./components/CheckOutForm/CheckOut/PaymentForm";
+import Checkout from "./components/CheckOutForm/CheckOut/Checkout";
+
+import { useForm } from "react-hook-form";
+
 import {
   Route,
   Routes,
@@ -15,10 +22,15 @@ import {
 } from "react-router-dom";
 
 let App = () => {
+  let [checkoutToken1, setCheckoutToken1] = useState("");
   let [isLoading, setIsLoading] = useState(true);
   let [products, setProducts] = useState([]);
   let [cart, setCart] = useState({ cart: { total_items: 0 } });
   console.log("cart in App.js=", cart);
+
+  let checkoutTokenHandler = (checkoutToken) => {
+    setCheckoutToken1(checkoutToken);
+  };
 
   let fetchProducts = async () => {
     setIsLoading(true);
@@ -101,6 +113,18 @@ let App = () => {
             />
           }
         />
+        <Route
+          path="/checkout"
+          element={
+            <Checkout checkoutTokenHandler={checkoutTokenHandler} cart={cart} />
+          }
+        >
+          <Route
+            path="shippingaddress"
+            element={<AddressForm checkoutToken1={checkoutToken1} />}
+          />
+          <Route path="payment" element={<PaymentForm />} />
+        </Route>
       </Routes>
     </div>
   );
