@@ -9,7 +9,7 @@ import Cart from "./components/Cart/Cart";
 import AddressForm from "./components/CheckOutForm/CheckOut/AddressForm";
 import PaymentForm from "./components/CheckOutForm/CheckOut/PaymentForm";
 import Checkout from "./components/CheckOutForm/CheckOut/Checkout";
-
+import Confirmation from "./components/CheckOutForm/CheckOut/Confirmation";
 import { useForm } from "react-hook-form";
 
 import {
@@ -26,7 +26,6 @@ let App = () => {
   let [isLoading, setIsLoading] = useState(true);
   let [products, setProducts] = useState([]);
   let [cart, setCart] = useState({ cart: { total_items: 0 } });
-  console.log("cart in App.js=", cart);
 
   let checkoutTokenHandler = (checkoutToken) => {
     setCheckoutToken1(checkoutToken);
@@ -50,15 +49,7 @@ let App = () => {
   };
 
   let updateCartQuantity = async (productId, quantity) => {
-    // console.log(
-    //   "updateCartQuantity: productId:",
-    //   productId,
-    //   "lineItem quantity=",
-    //   quantity
-    // );
     let response = await commerce.cart.update(productId, { quantity });
-
-    // console.log("updateCartQuantity: response=", response);
 
     setCart(response.cart);
   };
@@ -74,10 +65,8 @@ let App = () => {
   };
 
   let handleAddToCart = async (productId, productQuantity) => {
-    // console.log("handle add to cart:");
-
     let cart = await commerce.cart.add(productId, productQuantity);
-    // console.log("cart after added items=", cart);
+
     setCart(cart.cart);
   };
 
@@ -123,7 +112,11 @@ let App = () => {
             path="shippingaddress"
             element={<AddressForm checkoutToken1={checkoutToken1} />}
           />
-          <Route path="payment" element={<PaymentForm />} />
+          <Route
+            path="payment"
+            element={<PaymentForm checkoutToken1={checkoutToken1} />}
+          />
+          <Route path="confirmation" element={<Confirmation />} />
         </Route>
       </Routes>
     </div>

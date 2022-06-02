@@ -1,13 +1,15 @@
 import React from "react";
 import "./checkoutform.css";
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import commerce from "../../../lib/Commerce";
+import LoadingSpinner from "../../../LoadingSpinner";
 
-const Checkout = ({ cart }) => {
+const Checkout = ({ cart, checkoutTokenHandler }) => {
   let [stepNum, setStepNum] = useState(1);
-  let [checkoutToken, setCheckoutToken] = useState(null);
+  let [checkoutToken, setCheckoutToken] = useState("");
   let [numDesign, setNumDesign] = useState([]);
+  let nextLink = ["", "/checkout/payment", "/checkout/confirmation", "/"];
 
   useEffect(() => {
     if (stepNum === 1) {
@@ -50,6 +52,12 @@ const Checkout = ({ cart }) => {
     generateToken();
   }, [cart]);
 
+  useEffect(() => {
+    checkoutTokenHandler(checkoutToken);
+  }, [checkoutToken]);
+
+  if (!checkoutToken) return <LoadingSpinner />;
+
   return (
     <div className="checkout container">
       <div className="row">
@@ -72,16 +80,33 @@ const Checkout = ({ cart }) => {
         </div>
       </div>
 
-      <button
-        onClick={() => {
-          setStepNum((prev) => {
-            return ++prev;
-          });
-        }}
-        className="btn btn-primary"
-      >
-        ++num
-      </button>
+      <br />
+
+      <div className="row">
+        <div className="col-12">
+          <div className="d-flex align-items-center justify-content-center gap-3">
+            <div className="text-center">
+              <Link to="/cart" className="text-capitalize btn btn-primary">
+                back to cart
+              </Link>
+            </div>
+            <div>
+              <Link
+                onClick={() => {
+                  setStepNum((prev) => {
+                    return ++prev;
+                  });
+                }}
+                to={nextLink[stepNum]}
+                replace
+                className="text-capitalize btn btn-primary"
+              >
+                next
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

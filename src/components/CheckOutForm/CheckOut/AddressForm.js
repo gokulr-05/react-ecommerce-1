@@ -2,9 +2,13 @@ import React from "react";
 import "./AddressForm.css";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import commerce from "./../../../lib/Commerce";
+import LoadingSpinner from "../../../LoadingSpinner";
 
 const AddressForm = ({ checkoutToken1 }) => {
+  let [ckToken, setCktoken] = useState(checkoutToken1);
+  console.log("checkoutToken1=", checkoutToken1);
   const [shippingCountries, setShippingCountries] = useState([]);
   const [shippingCountry, setShippingCountry] = useState("");
   const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
@@ -12,14 +16,11 @@ const AddressForm = ({ checkoutToken1 }) => {
   const [shippingOptions, setShippingOptions] = useState([]);
   const [shippingOption, setShippingOption] = useState("");
 
-  console.log("shippingCountries=", shippingCountries);
-  console.log("shippingCountry=", shippingCountry);
-
   let fetchShippingCountries = async (checkoutId) => {
     let response = await commerce.services.localeListShippingCountries(
       checkoutId
     );
-    // console.log("shipping countries=", response.countries);
+
     setShippingCountries(response.countries);
 
     let con = Object.keys(response.countries)[0];
@@ -37,20 +38,41 @@ const AddressForm = ({ checkoutToken1 }) => {
     setShippingSubdivision(sub);
   };
 
+  let fetchShippingOptions = async (checkoutId, country, region = null) => {
+    let response = await commerce.checkout.getShippingOptions(checkoutId, {
+      country: country,
+      region: region,
+    });
+    // console.log("options=", response);
+    setShippingOptions(response);
+    setShippingOption(response[0].id);
+  };
+
   useEffect(() => {
-    fetchShippingCountries(checkoutToken1.id);
-  }, [checkoutToken1.id]);
+    fetchShippingCountries(ckToken.id);
+  }, [ckToken]);
+
+  useEffect(() => {
+    if (shippingCountry) fetchShippingSubDivisions(ckToken.id, shippingCountry);
+  }, [ckToken, shippingCountry]);
 
   useEffect(() => {
     if (shippingCountry)
-      fetchShippingSubDivisions(checkoutToken1.id, shippingCountry);
-  }, [checkoutToken1.id, shippingCountry]);
+      fetchShippingOptions(ckToken.id, shippingCountry, shippingSubdivision);
+  }, [ckToken, shippingCountry, shippingSubdivision]);
 
   let {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    setCktoken(checkoutToken1);
+  }, [checkoutToken1]);
+
+  if (!checkoutToken1) return <LoadingSpinner />;
+
   return (
     <div className="container addressform d-flex align-items-center justify-content-center">
       <div className="row">
@@ -177,6 +199,47 @@ const AddressForm = ({ checkoutToken1 }) => {
               </select>
             </div>
           </div>
+          <div className="row">
+            <div className="col-6">
+              <label htmlFor="shipping options" className="text-capitalize">
+                shipping options
+              </label>
+            </div>
+            <div className="col-6">
+              <select name="" id={shippingOption}>
+                {shippingOptions.map((opt) => {
+                  return (
+                    <option key={opt.id} value={opt.id}>
+                      {`${opt.description}-${opt.price.formatted_with_symbol}`}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+          <br />
+          {/* <div className="row">
+            <div className="col-12">
+              <div className="d-flex align-items-center justify-content-center gap-3">
+                <div className="text-center">
+                  <Link to="/cart" className="text-capitalize btn btn-primary">
+                    back to cart
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    onClick={() => {
+                      setStepNum1(2);
+                    }}
+                    to="/checkout/payment"
+                    className="text-capitalize btn btn-primary"
+                  >
+                    next
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div> */}
         </div>
       </div>
     </div>
